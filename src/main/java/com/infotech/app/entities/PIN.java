@@ -16,8 +16,7 @@ public class PIN {
     @Column(name = "SERIAL_CODE")
     private String serialCode;
 
-    public PIN() {
-    }
+    public PIN() { }
 
     public PIN(String pinCode, String serialId) {
         this.activationCode = pinCode;

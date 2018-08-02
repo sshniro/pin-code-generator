@@ -23,13 +23,21 @@ public class SpringBootHibernateProjectApplication implements CommandLineRunner 
     @Autowired
     private PINDao pinDao;
 
+    @Autowired
+    private BatchDao batchDao;
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootHibernateProjectApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        generatePins(7, true);
+        batchDao.createNewBatch();
+        batchDao.createNewBatch();
+        batchDao.createNewBatch();
+        batchDao.getLastUpdatedId();
+
+//        generatePins(7, true);
     }
 
 

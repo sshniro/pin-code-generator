@@ -1,4 +1,4 @@
-com/infotech/app/EmployeeDao.class
+com/infotech/app/entities/PIN.class
+com/infotech/app/PINDao.class
 com/infotech/app/SpringBootHibernateProjectApplication.class
-com/infotech/app/entities/Employee.class
 com/infotech/app/util/HibernateUtilConfig.class
