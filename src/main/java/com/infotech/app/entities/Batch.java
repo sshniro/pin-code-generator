@@ -17,12 +17,16 @@ public class Batch {
     @Column(name = "BATCH_SIZE")
     private int batchSize;
 
+    @Column(name = "VALUE")
+    private int value;
+
     public Batch() {
     }
 
-    public Batch(String createdDate) {
+    public Batch(String createdDate, int value) {
         this.createdDate = createdDate;
-    }
+        this.value = value;
+   }
 
     public int getBatchId() {
         return batchId;
@@ -46,5 +50,13 @@ public class Batch {
 
     public void setBatchSize(int batchSize) {
         this.batchSize = batchSize;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 }

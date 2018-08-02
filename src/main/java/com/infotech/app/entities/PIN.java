@@ -13,10 +13,21 @@ public class PIN {
     @Column(name = "PIN_CODE")
     private String activationCode;
 
+    @Column(name = "BATCH_ID")
+    private int batchId;
+
     @Column(name = "SERIAL_CODE")
     private String serialCode;
 
-    public PIN() { }
+    @Column(name = "IS_ACTIVATED")
+    private boolean isActivated;
+
+    @Column(name = "ACTIVATED_TIME")
+    private String activatedTime;
+
+    public PIN() {
+
+    }
 
     public PIN(String pinCode, String serialId) {
         this.activationCode = pinCode;
@@ -37,5 +48,29 @@ public class PIN {
 
     public void setSerialCode(String serialCode) {
         this.serialCode = serialCode;
+    }
+
+    public int getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(int batchId) {
+        this.batchId = batchId;
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public String getActivatedTime() {
+        return activatedTime;
+    }
+
+    public void setActivatedTime(String activatedTime) {
+        this.activatedTime = activatedTime;
     }
 }

@@ -1,6 +1,7 @@
 package com.infotech.app;
 
 import com.infotech.app.entities.Batch;
+import com.infotech.app.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,15 @@ public class BatchDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void createNewBatch() {
+    @Autowired
+    private Util util;
+
+    public void createNewBatch(Batch batch) {
         Session session= null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            int ID = (Integer) session.save(new Batch(getCurrentTimeStamp()));
+            int ID = (Integer) session.save(batch);
             System.out.println("New batch has been created with the batch id of " + ID);
             session.getTransaction().commit();
             session.close();
@@ -30,24 +34,18 @@ public class BatchDao {
         }
     }
 
-    public void getLastUpdatedId() {
+    public int getLastUpdatedId() throws Exception {
         Session session= null;
         try {
             session = sessionFactory.openSession();
             BigInteger lastId = (BigInteger) session.createSQLQuery("SELECT LAST_INSERT_ID()")
                     .uniqueResult();
-            System.out.println("last id is" + lastId);
+            return lastId.intValue();
         }catch (Exception e){
             e.printStackTrace();
+            throw new Exception();
         }
-
     }
 
-    public String getCurrentTimeStamp() {
-        Date date = new Date();
-        long time = date.getTime();
 
-        Timestamp ts = new Timestamp(time);
-        return ts.toString();
-    }
 }

@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.infotech.app.entities.Batch;
 import com.infotech.app.entities.PIN;
+import com.infotech.app.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,22 +28,47 @@ public class SpringBootHibernateProjectApplication implements CommandLineRunner 
     @Autowired
     private BatchDao batchDao;
 
+    @Autowired
+    private Util util;
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootHibernateProjectApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        batchDao.createNewBatch();
-        batchDao.createNewBatch();
-        batchDao.createNewBatch();
+
+        batchDao.createNewBatch(new Batch(util.getCurrentTimeStamp(), 10));
+        batchDao.createNewBatch(new Batch(util.getCurrentTimeStamp(), 10));
         batchDao.getLastUpdatedId();
 
 //        generatePins(7, true);
     }
 
+    public void activatePin(String pinCode) {
 
-    public void generatePins(int pinCodeLength, boolean isOnlyNumbers) {
+        PIN pin = pinDao.getActivationCode(pinCode);
+        if (pin.getActivationCode() != null) {
+            if (!pin.isActivated()) {
+                // activate the pin and send response with the value
+                pin.setActivated(true);
+                pin.setActivatedTime(util.getCurrentTimeStamp());
+                pinDao.persistPINCode(pin);
+
+                // return success call back
+            }else {
+                System.out.println("Card already activated");
+            }
+        }else {
+            System.out.println("Activation Code Not Found");
+        }
+    }
+
+    public void generatePins(int pinCodeLength, boolean isOnlyNumbers, int value) {
+
+        // create a new batch ID
+        Batch batch = new Batch(util.getCurrentTimeStamp(), value);
+
 
         Map<String, Integer> pinCodeMap = new HashMap<>();
 
