@@ -8,17 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Repository
 public class BatchDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-
-    @Autowired
-    private Util util;
 
     public void createNewBatch(Batch batch) {
         Session session= null;
