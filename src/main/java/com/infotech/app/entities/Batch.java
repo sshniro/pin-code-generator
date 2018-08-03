@@ -20,6 +20,9 @@ public class Batch {
     @Column(name = "VALUE")
     private int value;
 
+    @Column(name = "IS_ACTIVE")
+    private boolean isActive;
+
     public Batch() {
     }
 
@@ -58,5 +61,13 @@ public class Batch {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
