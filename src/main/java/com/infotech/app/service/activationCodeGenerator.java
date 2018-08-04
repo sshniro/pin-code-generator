@@ -1,6 +1,8 @@
 package com.infotech.app.service;
 
+import java.util.Map;
+
 public interface activationCodeGenerator {
 
-    public boolean generatePINCodeBatch();
+    public Map<String, Integer> generatePINCodeBatch(int pinCodeLength, int batchSize, int value);
 }

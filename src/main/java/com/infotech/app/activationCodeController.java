@@ -1,18 +1,19 @@
 package com.infotech.app;
 
+import com.infotech.app.constants.GeneratorConstants;
 import com.infotech.app.service.activationCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
 public class activationCodeController {
 
     @Autowired
-    private activationCodeGenerator codeGenerator;
+    private activationCodeGenerator generator;
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
     public static String getNiro() {
@@ -31,16 +32,10 @@ public class activationCodeController {
     }
 
     @RequestMapping(path = "/generateBatch", method = RequestMethod.GET)
-    public static boolean generateBatch() {
+    public Map<String, Integer> generateBatch(@RequestParam("digitCount") int digitCount,
+                                              @RequestParam("batchSize") int batchSize,
+                                              @RequestParam("value") int value) {
 
-        // get digit count
-
-        // get timeout
-
-        // get batch value
-
-        return true;
-
+        return generator.generatePINCodeBatch(digitCount, batchSize, value);
     }
-
 }
