@@ -28,12 +28,11 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
     public Map<String, Integer> generatePINCodeBatch(int pinCodeLength, int batchSize, int value) {
 
         // create a new batch ID
-        Batch batch = new Batch(util.getCurrentTimeStamp(), value);
-
+        Batch batch = new Batch(util.getCurrentTimeStamp(), value, false);
+        batchDao.persistBatch(batch);
 
         Map<String, Integer> pinCodeMap = new HashMap<>();
 
-        Random rand = new Random();
         int generatedPinCodesCount = 0;
 
         int groupDigitCount = pinCodeLength / GeneratorConstants.groupByCount;
@@ -45,7 +44,7 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
             String paddedPinCode = "";
             if (groupDigitCount != 0) {
                 for (int i = 0; i < groupDigitCount; i++) {
-                    paddedPinCode = addPaddingToNumbers(
+                    paddedPinCode = util.addPaddingToNumbers(
                             String.valueOf(generateRandomNumbers(((int) Math.pow(10, GeneratorConstants.groupByCount))) - 1),
                             GeneratorConstants.groupByCount
                     );
@@ -53,7 +52,7 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
                 }
             }
             if (leftOverDigitsCount != 0) {
-                paddedPinCode = addPaddingToNumbers(
+                paddedPinCode = util.addPaddingToNumbers(
                         String.valueOf(generateRandomNumbers(((int) Math.pow(10, leftOverDigitsCount))) - 1),
                         leftOverDigitsCount);
                 pinCode = pinCode + paddedPinCode;
@@ -61,6 +60,7 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
 
 
             // If it passes all the rules
+            customRules(pinCode);
 
             // If it is not present in the data base
             if (!pinDao.isActivationCodeExists(pinCode)) {
@@ -73,11 +73,12 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
             }
         }
 
+//        for (Map.Entry<String, Integer> entry : pinCodeMap.entrySet()) {
+//            System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
+//        }
 
-        for (Map.Entry<String, Integer> entry : pinCodeMap.entrySet()) {
-            System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
-        }
-
+        batch.setBatchSize(generatedPinCodesCount);
+        batchDao.updateBatch(batch);
         return pinCodeMap;
     }
 
@@ -85,19 +86,7 @@ public class activationCodeGeneratorImpl implements activationCodeGenerator{
         return true;
     }
 
-    private String addPaddingToNumbers(String pinCode, int paddingLength) {
-        String padding = "";
-        if (pinCode.length() < paddingLength) {
-            int difference = paddingLength - pinCode.length();
-            for (int i = 0; i < difference; i++) {
-                padding = padding + "0";
-            }
 
-        } else if (pinCode.length() == paddingLength) {
-            return pinCode;
-        }
-        return padding + pinCode;
-    }
 
     private int generateRandomNumbers(int max) {
         return new Random().nextInt(max);

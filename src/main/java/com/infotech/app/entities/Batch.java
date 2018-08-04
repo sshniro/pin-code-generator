@@ -23,12 +23,16 @@ public class Batch {
     @Column(name = "IS_ACTIVE")
     private boolean isActive;
 
+    @Column(name = "ACTIVATED_DATE")
+    private String activatedDate;
+
     public Batch() {
     }
 
-    public Batch(String createdDate, int value) {
+    public Batch(String createdDate, int value, boolean isActive) {
         this.createdDate = createdDate;
         this.value = value;
+        this.isActive = isActive;
    }
 
     public int getBatchId() {

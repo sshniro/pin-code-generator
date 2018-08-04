@@ -38,9 +38,9 @@ public class SpringBootHibernateProjectApplication implements CommandLineRunner 
     @Override
     public void run(String... args) throws Exception {
 
-        batchDao.createNewBatch(new Batch(util.getCurrentTimeStamp(), 10));
-        batchDao.createNewBatch(new Batch(util.getCurrentTimeStamp(), 10));
-        batchDao.getLastUpdatedId();
+//        batchDao.persistBatch(new Batch(util.getCurrentTimeStamp(), 10));
+//        batchDao.persistBatch(new Batch(util.getCurrentTimeStamp(), 10));
+//        batchDao.getLastUpdatedId();
 
 //        generatePins(7, true);
     }
@@ -64,76 +64,62 @@ public class SpringBootHibernateProjectApplication implements CommandLineRunner 
         }
     }
 
-    public void generatePins(int pinCodeLength, boolean isOnlyNumbers, int value) {
-
-        // create a new batch ID
-        Batch batch = new Batch(util.getCurrentTimeStamp(), value);
-
-
-        Map<String, Integer> pinCodeMap = new HashMap<>();
-
-        Random rand = new Random();
-        int generatedPinCodesCount = 0;
-
-        int groupDigitCount = pinCodeLength / groupByCount;
-        int leftOverDigitsCount = pinCodeLength % groupByCount;
-
-
-        while (generatedPinCodesCount < batchSize) {
-            String pinCode = "";
-            String paddedPinCode = "";
-            if (groupDigitCount != 0) {
-                for (int i = 0; i < groupDigitCount; i++) {
-                    paddedPinCode = addPaddingToNumbers(
-                            String.valueOf(generateRandomNumbers(((int) Math.pow(10, groupByCount))) - 1),
-                            groupByCount
-                    );
-                    pinCode = pinCode + paddedPinCode;
-                }
-            }
-            if (leftOverDigitsCount != 0) {
-                paddedPinCode = addPaddingToNumbers(
-                        String.valueOf(generateRandomNumbers(((int) Math.pow(10, leftOverDigitsCount))) - 1),
-                        leftOverDigitsCount);
-                pinCode = pinCode + paddedPinCode;
-            }
-
-
-            // If it passes all the rules
-
-            // If it is not present in the data base
-            if (!pinDao.isActivationCodeExists(pinCode)) {
-                // persist to DB
-                pinDao.createPinCode(pinCode, String.valueOf(generatedPinCodesCount));
-                pinCodeMap.put(pinCode, generatedPinCodesCount);
-                generatedPinCodesCount++;
-            } else {
-                System.out.println("duplicate entry found");
-            }
-        }
-
-
-        for (Map.Entry<String, Integer> entry : pinCodeMap.entrySet()) {
-            System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
-        }
-    }
+//    public void generatePins(int pinCodeLength, boolean isOnlyNumbers, int value) {
+//
+//        // create a new batch ID
+//        Batch batch = new Batch(util.getCurrentTimeStamp(), value);
+//
+//
+//        Map<String, Integer> pinCodeMap = new HashMap<>();
+//
+//        Random rand = new Random();
+//        int generatedPinCodesCount = 0;
+//
+//        int groupDigitCount = pinCodeLength / groupByCount;
+//        int leftOverDigitsCount = pinCodeLength % groupByCount;
+//
+//
+//        while (generatedPinCodesCount < batchSize) {
+//            String pinCode = "";
+//            String paddedPinCode = "";
+//            if (groupDigitCount != 0) {
+//                for (int i = 0; i < groupDigitCount; i++) {
+//                    paddedPinCode = addPaddingToNumbers(
+//                            String.valueOf(generateRandomNumbers(((int) Math.pow(10, groupByCount))) - 1),
+//                            groupByCount
+//                    );
+//                    pinCode = pinCode + paddedPinCode;
+//                }
+//            }
+//            if (leftOverDigitsCount != 0) {
+//                paddedPinCode = addPaddingToNumbers(
+//                        String.valueOf(generateRandomNumbers(((int) Math.pow(10, leftOverDigitsCount))) - 1),
+//                        leftOverDigitsCount);
+//                pinCode = pinCode + paddedPinCode;
+//            }
+//
+//
+//            // If it passes all the rules
+//
+//            // If it is not present in the data base
+//            if (!pinDao.isActivationCodeExists(pinCode)) {
+//                // persist to DB
+//                pinDao.createPinCode(pinCode, String.valueOf(generatedPinCodesCount));
+//                pinCodeMap.put(pinCode, generatedPinCodesCount);
+//                generatedPinCodesCount++;
+//            } else {
+//                System.out.println("duplicate entry found");
+//            }
+//        }
+//
+//
+//        for (Map.Entry<String, Integer> entry : pinCodeMap.entrySet()) {
+//            System.out.println("Item : " + entry.getKey() + " Count : " + entry.getValue());
+//        }
+//    }
 
     private boolean customRules(String pinCode) {
         return true;
-    }
-
-    private String addPaddingToNumbers(String pinCode, int paddingLength) {
-        String padding = "";
-        if (pinCode.length() < paddingLength) {
-            int difference = paddingLength - pinCode.length();
-            for (int i = 0; i < difference; i++) {
-                padding = padding + "0";
-            }
-
-        } else if (pinCode.length() == paddingLength) {
-            return pinCode;
-        }
-        return padding + pinCode;
     }
 
     private int generateRandomNumbers(int max) {

@@ -15,13 +15,25 @@ public class BatchDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void createNewBatch(Batch batch) {
+    public void persistBatch(Batch batch) {
         Session session= null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
             int ID = (Integer) session.save(batch);
-            System.out.println("New batch has been created with the batch id of " + ID);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBatch(Batch batch) {
+        Session session= null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.update(batch);
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {

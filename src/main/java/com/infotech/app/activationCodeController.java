@@ -21,7 +21,7 @@ public class activationCodeController {
     }
 
     @RequestMapping(path = "/activateBatch", method = RequestMethod.GET)
-    public static boolean activateBatch() {
+    public static boolean activateBatch(@RequestParam("batchSize") int batchID) {
         // check if the batch exits
 
         // check if already activated
