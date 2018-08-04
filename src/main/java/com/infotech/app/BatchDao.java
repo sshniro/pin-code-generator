@@ -41,12 +41,25 @@ public class BatchDao {
         }
     }
 
+    public Batch getBatchById(int batchId) {
+        Batch batch = null;
+        Session session= null;
+        try {
+            session = sessionFactory.openSession();
+            batch = (Batch) session.get(Batch.class, batchId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return batch;
+    }
+
     public int getLastUpdatedId() throws Exception {
         Session session= null;
         try {
             session = sessionFactory.openSession();
             BigInteger lastId = (BigInteger) session.createSQLQuery("SELECT LAST_INSERT_ID()")
                     .uniqueResult();
+            session.close();
             return lastId.intValue();
         }catch (Exception e){
             e.printStackTrace();

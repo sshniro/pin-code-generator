@@ -16,7 +16,7 @@ public class UtilImpl implements Util {
         return ts.toString();
     }
 
-    private String addPaddingToNumbers(String pinCode, int paddingLength) {
+    public String addPaddingToNumbers(String pinCode, int paddingLength) {
         String padding = "";
         if (pinCode.length() < paddingLength) {
             int difference = paddingLength - pinCode.length();

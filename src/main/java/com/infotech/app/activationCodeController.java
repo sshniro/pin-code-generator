@@ -1,6 +1,7 @@
 package com.infotech.app;
 
 import com.infotech.app.constants.GeneratorConstants;
+import com.infotech.app.entities.Batch;
 import com.infotech.app.service.activationCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,20 +16,26 @@ public class activationCodeController {
     @Autowired
     private activationCodeGenerator generator;
 
+    @Autowired
+    private BatchDao batchDao;
+
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
     public static String getNiro() {
         return "hello world";
     }
 
     @RequestMapping(path = "/activateBatch", method = RequestMethod.GET)
-    public static boolean activateBatch(@RequestParam("batchSize") int batchID) {
-        // check if the batch exits
-
-        // check if already activated
-
-        // if not activate and send a success message
-
-        return true;
+    public Map<String, String> activateBatch(@RequestParam("batchSize") int batchID) {
+        Map<String, String> response = new HashMap<>();
+        Batch batch = batchDao.getBatchById(batchID);
+        if (batch == null) {
+            response.put("status", "batchNotFound");
+        }else {
+            batch.setActive(true);
+            batchDao.updateBatch(batch);
+            response.put("status", "batch has been activated");
+        }
+        return response;
     }
 
     @RequestMapping(path = "/generateBatch", method = RequestMethod.GET)
