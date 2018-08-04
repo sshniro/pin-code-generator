@@ -20,7 +20,7 @@ public class activationCodeController {
     private BatchDao batchDao;
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
-    public static String getNiro() {
+    public static String getHello() {
         return "hello world";
     }
 
@@ -39,10 +39,16 @@ public class activationCodeController {
     }
 
     @RequestMapping(path = "/generateBatch", method = RequestMethod.GET)
-    public Map<String, Integer> generateBatch(@RequestParam("digitCount") int digitCount,
+    public Map<String, String> generateBatch(@RequestParam("digitCount") int digitCount,
                                               @RequestParam("batchSize") int batchSize,
                                               @RequestParam("value") int value) {
-
-        return generator.generatePINCodeBatch(digitCount, batchSize, value);
+        Map<String, String> response = new HashMap<>();
+        Map<String, Integer> pinCodeMap = generator.generatePINCodeBatch(digitCount, batchSize, value);
+        if (pinCodeMap.size() == 0) {
+            response.put("status", "error occurred while creating new pin codes");
+        }else {
+            response.put("status", "pin codes successfully created");
+        }
+        return response;
     }
 }
